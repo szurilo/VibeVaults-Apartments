@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# VibeVaults Residences (test site)
 
-## Getting Started
+A demo Next.js site dressed up as a seafront apartment business. Built for
+testing purposes, nothing here is real or bookable.
 
-First, run the development server:
+## Run it
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run dev     # http://localhost:3000
+npm run build   # production build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Pages
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Route | Notes |
+| --- | --- |
+| `/` | Homepage: hero, apartment grid, amenities, reviews, location, contact form |
+| `/apartments?type=<value>` | Query-driven subpage, content changes with `type` |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## The query string subpage
 
-## Learn More
+`src/app/apartments/page.tsx` reads the `type` query parameter and renders one
+of three states:
 
-To learn more about Next.js, take a look at the following resources:
+- **Known value** (`studio`, `deluxe`, `penthouse`, `family`) renders that
+  apartment's own hero colour, copy, price, amenities and booking sidebar. The
+  page `<title>` and meta description change with it too.
+- **Unrecognised value** (e.g. `?type=banana`) shows a warning listing the valid
+  values, followed by the full apartment grid.
+- **No `type` at all** shows a "choose an apartment" index.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Try:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+/apartments?type=studio
+/apartments?type=deluxe
+/apartments?type=penthouse
+/apartments?type=family
+/apartments?type=banana
+/apartments
+```
 
-## Deploy on Vercel
+Every variant ends with a collapsible **query string inspector** listing each
+key and value that reached the server, which makes it easy to confirm what a
+test actually sent (`/apartments?type=deluxe&guests=3&nights=5` shows all three).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The route is server-rendered on demand (`f` in the build output), so the query
+is read on the server via the async `searchParams` prop.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Adding another apartment type
+
+Add an entry to `APARTMENTS` in `src/lib/apartments.ts` and add its key to the
+`ApartmentKey` union. The homepage grid, footer links, index page and
+valid-value list all derive from that object.
