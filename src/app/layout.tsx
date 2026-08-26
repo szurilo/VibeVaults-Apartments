@@ -27,6 +27,7 @@ export default function RootLayout({
         <SiteHeader />
         <main className="flex-1">{children}</main>
         <SiteFooter />
+        <script src="http://localhost:3000/widget.js" data-key="4f5d6785c53ca7f2d710f363f71c448d" async></script>
       </body>
     </html>
   );
