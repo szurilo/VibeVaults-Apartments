@@ -27,7 +27,7 @@ export default function RootLayout({
         <SiteHeader />
         <main className="flex-1">{children}</main>
         <SiteFooter />
-        <script src="http://localhost:3000/widget.js" data-key="977acaf5dc30b58190f849538b1d9e61" async></script>
+        <script src="https://www.vibe-vaults.com/widget.js" data-key="47b1f7cbd8152a86aa095b44e5bbff13" async></script>
       </body>
     </html>
   );
